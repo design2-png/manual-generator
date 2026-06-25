@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0057)file:///C:/Users/linko/Downloads/manual-generator_48.html -->
+<!-- saved from url=(0057)file:///C:/Users/linko/Downloads/manual-generator_57.html -->
 <html lang="zh-Hant"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -143,7 +143,7 @@
   .step-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
   .scard{ border:1px solid var(--line); display:flex; flex-direction:column; }
   .scard-bar{ background:var(--ink); color:#fff; border-bottom:1px solid var(--ink); font-size:11.5px; font-weight:700; padding:6px 9px; }
-  .scard-img{ flex:1; min-height:165px; display:flex; align-items:center; justify-content:center; padding:12px; overflow:hidden; }
+  .scard-img{ position:relative; flex:1; min-height:165px; display:flex; align-items:center; justify-content:center; padding:12px; overflow:hidden; }
   .scard-img img{ max-width:100%; max-height:185px; object-fit:contain; }
   .scard-img .ph{ width:100%; height:155px; background:var(--field); display:flex; align-items:center; justify-content:center; color:var(--mute); font-size:11px; }
   .scard-tip{ font-size:10.5px; line-height:1.55; color:#555; padding:6px 9px; border-top:1px solid var(--line); }
@@ -162,6 +162,15 @@
   .design-note{ margin-top:6px; padding:4px 8px; background:#FFF8E1; border-left:3px solid #FBC02D; font-size:11px; color:#7a5d00; line-height:1.5; }
   /* 可貼上的圖位：聚焦時提示 */
   .pastebox:focus{ outline:2px solid var(--orange); outline-offset:1px; }
+  .draghandle{ cursor:grab; color:#bbb; font-size:15px; margin-right:6px; user-select:none; }
+  .draghandle:active{ cursor:grabbing; }
+  .dragblock{ transition:opacity .12s, box-shadow .12s; }
+  .dragblock.dragging{ opacity:.35; box-shadow:0 4px 16px rgba(0,0,0,.2); }
+  .dragblock.drop-target{ box-shadow:0 -3px 0 0 var(--orange) inset, 0 0 0 2px var(--orange); background:rgba(255,90,31,.06); }
+  .draghandle:hover{ color:var(--orange); }
+  .movebtns{ display:inline-flex; gap:3px; margin-left:8px; }
+  .movebtns .icon{ padding:2px 7px; }
+  .item-bar{ display:flex; align-items:center; gap:8px; padding:4px 0 8px; border-bottom:1px dashed var(--line); margin-bottom:10px; }
   .note-in{ font-size:11px; }
 
   /* 標註編輯器 */
@@ -245,18 +254,26 @@
     </div><div class="sec"><h2>② 操作區塊</h2>
       <div class="hint">每塊一個黑底標題，底下可放多張「圖 + 操作方式」。圖自行上傳、文字自己打。</div><div class="block">
         <div class="block-bar"><input value="頭枕操作說明" oninput="upBlock(1,this.value)"><button class="icon" style="color:#fff;border-color:#fff" onclick="toggleLayout(1)">並排圖</button><button class="icon" style="color:#fff;border-color:#fff" onclick="rmBlock(1)">刪</button></div>
-        <div class="block-body"><div class="item"><div class="item-row">
+        <div class="block-body"><div class="item dragblock" ondragstart="dragStart(event,&#39;item&#39;,11,1)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event,&#39;item&#39;,11,1)" ondragend="dragEnd(event)">
+          <div class="item-bar"><span class="draghandle" title="按住拖曳調整順序" onmousedown="enableDrag(this)" onmouseup="disableDrag(this)">⠿</span><span style="font-size:11px;color:#888">第 1 項</span>
+            <span class="movebtns"><button class="icon" onclick="moveItem(1,11,-1)" disabled="">↑</button><button class="icon" onclick="moveItem(1,11,1)">↓</button></span></div>
+          <div class="item-row">
           <div style="flex:0 0 84px">
             <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(1,11,d))" onpaste="pasteImg(event,d=&gt;setItemImg(1,11,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            
             <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(1,11)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
           </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(1,11,this.value)">握住頭枕兩側，向上或向下推移即可調整高低。</textarea>
             <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="" oninput="upItemNote(1,11,this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(1,11)">刪除此項</button>
-          </div></div></div><div class="item"><div class="item-row">
+          </div></div></div><div class="item dragblock" ondragstart="dragStart(event,&#39;item&#39;,12,1)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event,&#39;item&#39;,12,1)" ondragend="dragEnd(event)">
+          <div class="item-bar"><span class="draghandle" title="按住拖曳調整順序" onmousedown="enableDrag(this)" onmouseup="disableDrag(this)">⠿</span><span style="font-size:11px;color:#888">第 2 項</span>
+            <span class="movebtns"><button class="icon" onclick="moveItem(1,12,-1)">↑</button><button class="icon" onclick="moveItem(1,12,1)" disabled="">↓</button></span></div>
+          <div class="item-row">
           <div style="flex:0 0 84px">
             <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(1,12,d))" onpaste="pasteImg(event,d=&gt;setItemImg(1,12,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            
             <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(1,12)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
           </div>
           <div style="flex:1">
@@ -265,27 +282,39 @@
             <button class="icon del" style="margin-top:6px" onclick="rmItem(1,12)">刪除此項</button>
           </div></div></div><button class="add" onclick="addItem(1)">＋ 加一張圖/操作</button></div></div><div class="block">
         <div class="block-bar"><input value="扶手操作說明" oninput="upBlock(2,this.value)"><button class="icon" style="color:#fff;border-color:#fff" onclick="toggleLayout(2)">並排圖</button><button class="icon" style="color:#fff;border-color:#fff" onclick="rmBlock(2)">刪</button></div>
-        <div class="block-body"><div class="item"><div class="item-row">
+        <div class="block-body"><div class="item dragblock" ondragstart="dragStart(event,&#39;item&#39;,21,2)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event,&#39;item&#39;,21,2)" ondragend="dragEnd(event)">
+          <div class="item-bar"><span class="draghandle" title="按住拖曳調整順序" onmousedown="enableDrag(this)" onmouseup="disableDrag(this)">⠿</span><span style="font-size:11px;color:#888">第 1 項</span>
+            <span class="movebtns"><button class="icon" onclick="moveItem(2,21,-1)" disabled="">↑</button><button class="icon" onclick="moveItem(2,21,1)">↓</button></span></div>
+          <div class="item-row">
           <div style="flex:0 0 84px">
             <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(2,21,d))" onpaste="pasteImg(event,d=&gt;setItemImg(2,21,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            
             <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(2,21)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
           </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(2,21,this.value)">按壓扶手墊下方按鍵，同時上下移動扶手調整高度。</textarea>
             <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="" oninput="upItemNote(2,21,this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(2,21)">刪除此項</button>
-          </div></div></div><div class="item"><div class="item-row">
+          </div></div></div><div class="item dragblock" ondragstart="dragStart(event,&#39;item&#39;,22,2)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event,&#39;item&#39;,22,2)" ondragend="dragEnd(event)">
+          <div class="item-bar"><span class="draghandle" title="按住拖曳調整順序" onmousedown="enableDrag(this)" onmouseup="disableDrag(this)">⠿</span><span style="font-size:11px;color:#888">第 2 項</span>
+            <span class="movebtns"><button class="icon" onclick="moveItem(2,22,-1)">↑</button><button class="icon" onclick="moveItem(2,22,1)">↓</button></span></div>
+          <div class="item-row">
           <div style="flex:0 0 84px">
             <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(2,22,d))" onpaste="pasteImg(event,d=&gt;setItemImg(2,22,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            
             <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(2,22)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
           </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(2,22,this.value)">推動扶手墊前後滑移，調整至前臂自然支撐的位置。</textarea>
             <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="" oninput="upItemNote(2,22,this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(2,22)">刪除此項</button>
-          </div></div></div><div class="item"><div class="item-row">
+          </div></div></div><div class="item dragblock" ondragstart="dragStart(event,&#39;item&#39;,23,2)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event,&#39;item&#39;,23,2)" ondragend="dragEnd(event)">
+          <div class="item-bar"><span class="draghandle" title="按住拖曳調整順序" onmousedown="enableDrag(this)" onmouseup="disableDrag(this)">⠿</span><span style="font-size:11px;color:#888">第 3 項</span>
+            <span class="movebtns"><button class="icon" onclick="moveItem(2,23,-1)">↑</button><button class="icon" onclick="moveItem(2,23,1)" disabled="">↓</button></span></div>
+          <div class="item-row">
           <div style="flex:0 0 84px">
             <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(2,23,d))" onpaste="pasteImg(event,d=&gt;setItemImg(2,23,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            
             <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(2,23)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
           </div>
           <div style="flex:1">
@@ -294,9 +323,13 @@
             <button class="icon del" style="margin-top:6px" onclick="rmItem(2,23)">刪除此項</button>
           </div></div></div><button class="add" onclick="addItem(2)">＋ 加一張圖/操作</button></div></div><div class="block">
         <div class="block-bar"><input value="椅背後仰 &amp; 升降操作說明" oninput="upBlock(3,this.value)"><button class="icon" style="color:#fff;border-color:#fff" onclick="toggleLayout(3)">左文右圖</button><button class="icon" style="color:#fff;border-color:#fff" onclick="rmBlock(3)">刪</button></div>
-        <div class="block-body"><div class="item"><div class="item-row">
+        <div class="block-body"><div class="item dragblock" ondragstart="dragStart(event,&#39;item&#39;,31,3)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event,&#39;item&#39;,31,3)" ondragend="dragEnd(event)">
+          <div class="item-bar"><span class="draghandle" title="按住拖曳調整順序" onmousedown="enableDrag(this)" onmouseup="disableDrag(this)">⠿</span><span style="font-size:11px;color:#888">第 1 項</span>
+            <span class="movebtns"><button class="icon" onclick="moveItem(3,31,-1)" disabled="">↑</button><button class="icon" onclick="moveItem(3,31,1)" disabled="">↓</button></span></div>
+          <div class="item-row">
           <div style="flex:0 0 84px">
             <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(3,31,d))" onpaste="pasteImg(event,d=&gt;setItemImg(3,31,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            
             <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(3,31)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
           </div>
           <div style="flex:1">
@@ -486,9 +519,14 @@ function renderLeft(){
         <div class="block-body">`;
       b.items.forEach(it => {
         const annoCount = (it.anno && it.anno.length) ? it.anno.length : 0;
-        h += `<div class="item"><div class="item-row">
+        const ii = b.items.indexOf(it);
+        h += `<div class="item dragblock" ondragstart="dragStart(event,'item',${it.id},${b.id})" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event,'item',${it.id},${b.id})" ondragend="dragEnd(event)">
+          <div class="item-bar"><span class="draghandle" title="按住拖曳調整順序" onmousedown="enableDrag(this)" onmouseup="disableDrag(this)">⠿</span><span style="font-size:11px;color:#888">第 ${ii+1} 項</span>
+            <span class="movebtns"><button class="icon" onclick="moveItem(${b.id},${it.id},-1)" ${ii===0?'disabled':''}>↑</button><button class="icon" onclick="moveItem(${b.id},${it.id},1)" ${ii===b.items.length-1?'disabled':''}>↓</button></span></div>
+          <div class="item-row">
           <div style="flex:0 0 84px">
             <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=>setItemImg(${b.id},${it.id},d))" onpaste="pasteImg(event,d=>setItemImg(${b.id},${it.id},d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">${it.img?`<img src="${it.img}">`:"上傳/貼上"}</div>
+            ${it.img?`<button class="icon" style="width:100%;margin-top:5px;color:#c0392b;border-color:#c0392b" onclick="clearItemImg(${b.id},${it.id})">✕ 刪圖</button>`:''}
             <button class="icon" style="width:100%;margin-top:5px;${annoCount?'color:#FF5A1F;border-color:#FF5A1F':''}" onclick="openAnno(${b.id},${it.id})" ${it.img?'':'disabled title=\"先上傳圖才能標註\"'}>✎ 標註${annoCount?`(${annoCount})`:''}</button>
           </div>
           <div style="flex:1">
@@ -527,11 +565,19 @@ function renderLeft(){
     h += `<div class="sec"><h2>組裝步驟</h2>
       <div class="hint">一排三格呈現。每步：標題（STEP X：動作）、組裝圖（標示零件代號）、TIPS（選填）。</div>`;
     state.aSteps.forEach((st, i) => {
-      h += `<div class="block" style="padding:14px">
-        <div class="step-head"><span class="step-no">STEP ${i+1}</span><button class="icon del" onclick="rmStep(${st.id})">刪除</button></div>
+      h += `<div class="block dragblock" style="padding:14px" data-kind="step" data-id="${st.id}"
+          ondragstart="dragStart(event,'step',${st.id})" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event,'step',${st.id})" ondragend="dragEnd(event)">
+        <div class="step-head"><span class="draghandle" title="按住拖曳調整順序" onmousedown="enableDrag(this)" onmouseup="disableDrag(this)">⠿</span><span class="step-no">STEP ${i+1}</span>
+          <span class="movebtns"><button class="icon" onclick="moveStep(${st.id},-1)" ${i===0?'disabled':''}>↑</button><button class="icon" onclick="moveStep(${st.id},1)" ${i===state.aSteps.length-1?'disabled':''}>↓</button></span>
+          <button class="icon del" style="margin-left:auto" onclick="rmStep(${st.id})">刪除</button></div>
         <div class="fld"><label class="f">標題（動作）</label><input class="t" placeholder="例：安裝左右扶手" value="${esc(st.action)}" oninput="upStep(${st.id},'action',this.value)"></div>
-        <div class="fld"><label class="f">組裝圖（含零件代號標示）</label><div class="uploadbox" style="height:90px" onclick="pickImg(d=>setStepImg(${st.id},d))">${st.img?`<img src="${st.img}">`:"上傳圖"}</div></div>
+        <div class="fld"><label class="f">組裝圖（含零件代號標示）</label>
+          <div class="uploadbox pastebox" tabindex="0" style="height:90px" onclick="pickImg(d=>setStepImg(${st.id},d))" onpaste="pasteImg(event,d=>setStepImg(${st.id},d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">${st.img?`<img src="${st.img}">`:"上傳/貼上"}</div>
+          ${st.img?`<button class="icon" style="width:100%;margin-top:5px;color:#c0392b;border-color:#c0392b" onclick="clearStepImg(${st.id})">✕ 刪圖</button>`:''}
+          <button class="icon" style="width:100%;margin-top:5px;${(st.anno&&st.anno.length)?'color:#FF5A1F;border-color:#FF5A1F':''}" onclick="openAnnoStep(${st.id})" ${st.img?'':'disabled title="先上傳圖才能標註"'}>✎ 標註${(st.anno&&st.anno.length)?`(${st.anno.length})`:''}</button>
+        </div>
         <div class="fld"><label class="f">TIPS（選填）</label><input class="t" placeholder="例：氣壓棒直接插入底盤中心孔內" value="${esc(st.tip||'')}" oninput="upStep(${st.id},'tip',this.value)"></div>
+        <div class="fld"><input class="t note-in" placeholder="✎ 給設計的備註（選填，列印時不會出現）" value="${esc(st.note||'')}" oninput="upStep(${st.id},'note',this.value)"></div>
       </div>`;
     });
     h += `<button class="add" onclick="addStep()">＋ 新增 STEP</button></div>`;
@@ -592,7 +638,7 @@ function renderRight(){
       `</div>`;
     h += `<h2 class="psec">組裝步驟</h2>`;
     h += `<div class="step-grid">` +
-      state.aSteps.map((st, i) => `<div class="scard"><div class="scard-bar">STEP ${i+1}${st.action?'：'+esc(st.action):''}</div><div class="scard-img">${st.img?`<img src="${st.img}">`:`<div class="ph">組裝圖 ${i+1}</div>`}</div>${st.tip?`<div class="scard-tip">TIPS：${esc(st.tip)}</div>`:''}</div>`).join("") +
+      state.aSteps.map((st, i) => `<div class="scard"><div class="scard-bar">STEP ${i+1}${st.action?'：'+esc(st.action):''}</div><div class="scard-img">${st.img?`<span class="img-wrap"><img src="${st.img}">${annoOverlay(st)}</span>`:`<div class="ph">組裝圖 ${i+1}</div>`}</div>${st.tip?`<div class="scard-tip">TIPS：${esc(st.tip)}</div>`:''}${st.note?`<div class="design-note no-print">✎ ${esc(st.note)}</div>`:''}</div>`).join("") +
       `</div>`;
   }
 
@@ -681,33 +727,51 @@ function toggleLayout(id){ const b=state.opsBlocks.find(x=>x.id===id); b.layout=
 function addBlock(){ state.opsBlocks.push({id:uid(),title:"新操作區塊",items:[{id:uid(),img:null,text:""}]}); render(); }
 function addItem(bid){ state.opsBlocks.find(b=>b.id===bid).items.push({id:uid(),img:null,text:""}); render(); }
 function rmItem(bid,iid){ const b=state.opsBlocks.find(x=>x.id===bid); b.items=b.items.filter(i=>i.id!==iid); render(); }
+function moveItem(bid,iid,dir){ const b=state.opsBlocks.find(x=>x.id===bid); moveInArray(b.items, iid, dir); render(); }
 function upItem(bid,iid,v){ state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid).text=v; renderRight(); }
 function upItemNote(bid,iid,v){ state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid).note=v; renderRight(); }
 function setItemImg(bid,iid,d){ state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid).img=d; }
+function clearItemImg(bid,iid){ const it=state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid); it.img=null; it.anno=[]; render(); }
 
 // ====== 圖片標註編輯器 ======
-let _anno = { bid:null, iid:null, tool:"arrow", list:[], sel:-1 };
+let _anno = { getTarget:null, tool:"arrow", list:[], sel:-1 };
 
+// 操作區塊圖位
 function openAnno(bid, iid){
-  const it = state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid);
-  if(!it.img){ return; }
-  _anno.bid = bid; _anno.iid = iid;
+  _anno.getTarget = () => state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid);
+  _openAnnoCommon();
+}
+// 組裝步驟圖位
+function openAnnoStep(sid){
+  _anno.getTarget = () => state.aSteps.find(s=>s.id===sid);
+  _openAnnoCommon();
+}
+function _openAnnoCommon(){
+  const it = _anno.getTarget();
+  if(!it || !it.img){ return; }
   _anno.list = JSON.parse(JSON.stringify(it.anno || []));
   _anno.sel = -1;
-  _anno.tool = "arrow";
+  _anno.tool = null;
   const modal = document.getElementById("annoModal");
   const stage = document.getElementById("annoStage");
   stage.innerHTML = `<img src="${it.img}" id="annoImg">`;
   modal.style.display = "flex";
-  setTool("arrow");
+  document.querySelectorAll(".atool").forEach(b => b.classList.remove("on"));
+  const hint = document.getElementById("atoolHint");
+  if(hint) hint.textContent = "先選一個工具（箭頭/圈/文字），再到圖上點擊新增。標註可拖動、縮放、刪除。";
   const img = document.getElementById("annoImg");
   if(img.complete) drawAnno(); else img.onload = drawAnno;
   stage.onpointerdown = stageDown;
 }
 function closeAnno(){ document.getElementById("annoModal").style.display = "none"; }
 function setTool(t){
-  _anno.tool = t;
-  document.querySelectorAll(".atool").forEach(b => b.classList.toggle("on", b.dataset.tool === t));
+  // 點同一個工具可取消（toggle）
+  _anno.tool = (_anno.tool === t) ? null : t;
+  document.querySelectorAll(".atool").forEach(b => b.classList.toggle("on", b.dataset.tool === _anno.tool));
+  const hint = document.getElementById("atoolHint");
+  if(hint) hint.textContent = _anno.tool
+    ? "在圖上點一下放置；放好後可拖動、拖藍點縮放。"
+    : "先選一個工具（箭頭/圈/文字），再到圖上點擊新增。標註可拖動、縮放、刪除。";
 }
 function clearAnno(){ _anno.list = []; _anno.sel = -1; drawAnno(); }
 
@@ -738,12 +802,12 @@ function stageDown(e){
     startDrag(e, idx);
     return;
   }
-  // 4) 空白處：若有選取中的標註 → 先取消選取（看乾淨結果）；否則依工具新增
-  if(_anno.sel >= 0){
-    _anno.sel = -1;
-    drawAnno();
+  // 4) 空白處：沒有選工具 → 只取消選取，不新增（手滑點空白不會亂長）
+  if(!_anno.tool){
+    if(_anno.sel >= 0){ _anno.sel = -1; drawAnno(); }
     return;
   }
+  // 有選工具 → 新增一個，然後自動收起工具（避免連續誤增）
   const r = stage.getBoundingClientRect();
   const x = ((e.clientX - r.left) / r.width) * 100;
   const y = ((e.clientY - r.top) / r.height) * 100;
@@ -752,10 +816,14 @@ function stageDown(e){
   } else if(_anno.tool === "circle"){
     _anno.list.push({ type:"circle", x, y, w:18, h:18 });
   } else if(_anno.tool === "text"){
-    const t = prompt("輸入標註文字："); if(!t) return;
+    const t = prompt("輸入標註文字："); if(!t){ return; }
     _anno.list.push({ type:"text", x, y, text:t });
   }
   _anno.sel = _anno.list.length - 1;
+  _anno.tool = null; // 新增完自動收起工具
+  document.querySelectorAll(".atool").forEach(b => b.classList.remove("on"));
+  const hint = document.getElementById("atoolHint");
+  if(hint) hint.textContent = "已新增。可拖動位置、拖藍點縮放；要再加請再選一次工具。";
   drawAnno();
 }
 
@@ -825,8 +893,8 @@ function drawAnno(){
 }
 function delAnno(idx){ _anno.list.splice(idx,1); _anno.sel=-1; drawAnno(); }
 function saveAnno(){
-  const it = state.opsBlocks.find(b=>b.id===_anno.bid).items.find(i=>i.id===_anno.iid);
-  it.anno = _anno.list;
+  const it = _anno.getTarget && _anno.getTarget();
+  if(it){ it.anno = _anno.list; }
   closeAnno();
   render();
 }
@@ -846,7 +914,58 @@ document.addEventListener("keydown", (e)=>{
 function upStep(id,k,v){ state.aSteps.find(s=>s.id===id)[k]=v; renderRight(); }
 function rmStep(id){ state.aSteps=state.aSteps.filter(s=>s.id!==id); render(); }
 function addStep(){ state.aSteps.push({id:uid(),action:"",tip:"",img:null}); render(); }
+
+// 上下移動
+function moveStep(id, dir){ moveInArray(state.aSteps, id, dir); render(); }
+function moveInArray(arr, id, dir){
+  const i = arr.findIndex(x=>x.id===id);
+  const j = i + dir;
+  if(i<0 || j<0 || j>=arr.length) return;
+  const [x] = arr.splice(i,1); arr.splice(j,0,x);
+}
+// 拖放排序（步驟與操作項目共用）
+let _drag = { kind:null, id:null, bid:null };
+function enableDrag(handle){ const blk = handle.closest(".dragblock"); if(blk) blk.setAttribute("draggable","true"); }
+function disableDrag(handle){ const blk = handle.closest(".dragblock"); if(blk) blk.removeAttribute("draggable"); }
+function dragStart(e, kind, id, bid){ _drag={kind,id,bid:bid||null}; e.dataTransfer.effectAllowed="move"; e.currentTarget.classList.add("dragging"); }
+function dragOver(e){
+  e.preventDefault(); e.dataTransfer.dropEffect="move";
+  const blk = e.currentTarget;
+  if(!blk.classList.contains("dragging")){
+    document.querySelectorAll(".dragblock.drop-target").forEach(n=>{ if(n!==blk) n.classList.remove("drop-target"); });
+    blk.classList.add("drop-target");
+  }
+}
+function dragLeave(e){ e.currentTarget.classList.remove("drop-target"); }
+function dragEnd(e){
+  e.currentTarget.classList.remove("dragging");
+  e.currentTarget.removeAttribute("draggable");
+  document.querySelectorAll(".dragblock.drop-target").forEach(n=>n.classList.remove("drop-target"));
+  _drag={kind:null,id:null,bid:null};
+}
+function dropOn(e, kind, targetId, bid){
+  e.preventDefault();
+  document.querySelectorAll(".dragblock.drop-target").forEach(n=>n.classList.remove("drop-target"));
+  if(_drag.kind!==kind || _drag.id===targetId) return;
+  if(kind==="step"){
+    reorderTo(state.aSteps, _drag.id, targetId);
+  } else if(kind==="item"){
+    if(_drag.bid!==bid) return; // 只在同一區塊內排序
+    const blk = state.opsBlocks.find(b=>b.id===bid);
+    reorderTo(blk.items, _drag.id, targetId);
+  }
+  _drag={kind:null,id:null,bid:null};
+  render();
+}
+function reorderTo(arr, dragId, targetId){
+  const from = arr.findIndex(x=>x.id===dragId);
+  const to = arr.findIndex(x=>x.id===targetId);
+  if(from<0||to<0) return;
+  const [x] = arr.splice(from,1);
+  arr.splice(to,0,x);
+}
 function setStepImg(id,d){ state.aSteps.find(s=>s.id===id).img=d; }
+function clearStepImg(id){ const st=state.aSteps.find(s=>s.id===id); st.img=null; st.anno=[]; render(); }
 function addPart(){ state.parts.push({id:uid(),name:"",qty:1,img:null}); render(); }
 function rmPart(pid){ state.parts=state.parts.filter(p=>p.id!==pid); render(); }
 function upPart(pid,k,v){ state.parts.find(p=>p.id===pid)[k]=v; renderRight(); }
