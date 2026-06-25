@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)file:///C:/Users/linko/Downloads/index_9.html -->
+<!-- saved from url=(0057)file:///C:/Users/linko/Downloads/manual-generator_48.html -->
 <html lang="zh-Hant"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -99,7 +99,7 @@
   .pitems{ display:grid; border:1px solid var(--line); border-top:none; }
   .pitem{ padding:11px; border-right:1px solid var(--line); }
   .pitem:last-child{ border-right:none; }
-  .pitem .img{ height:130px; display:flex; align-items:center; justify-content:center; margin-bottom:8px; color:var(--mute); font-size:11px; overflow:hidden; }
+  .pitem .img{ position:relative; height:130px; display:flex; align-items:center; justify-content:center; margin-bottom:8px; color:var(--mute); font-size:11px; overflow:hidden; }
   .pitem .img.empty{ background:var(--field); }
   .pitem .img img{ max-height:128px; max-width:100%; }
   .pitem .lbl{ font-weight:700; font-size:12px; margin-bottom:3px; }
@@ -109,7 +109,7 @@
   .pitem-side:last-child{ border-bottom:none; }
   .pitem-side .side-txt .lbl{ font-weight:700; font-size:12px; margin-bottom:4px; }
   .pitem-side .side-txt .txt{ font-size:13px; line-height:1.8; }
-  .pitem-side .side-img{ height:260px; display:flex; align-items:center; justify-content:center; color:var(--mute); font-size:11px; overflow:hidden; }
+  .pitem-side .side-img{ position:relative; height:260px; display:flex; align-items:center; justify-content:center; color:var(--mute); font-size:11px; overflow:hidden; }
   .pitem-side .side-img.empty{ background:var(--field); }
   .pitem-side .side-img img{ max-height:100%; max-width:100%; width:auto; height:auto; }
   .pwarn{ display:flex; gap:12px; align-items:flex-start; border:1.5px solid var(--orange); padding:14px 16px; margin-top:20px; }
@@ -156,7 +156,44 @@
     .sheet{ border:none; box-shadow:none; padding:0; }
     .pblock, .pstep-grp, .pitem-side, .pwarn, .pgrid-flat, .pstep, .scard{ break-inside:avoid; page-break-inside:avoid; }
     .hero img{ max-height:260px; }
+    .no-print{ display:none !important; }
   }
+  /* 給設計的備註：預覽可見、列印隱藏 */
+  .design-note{ margin-top:6px; padding:4px 8px; background:#FFF8E1; border-left:3px solid #FBC02D; font-size:11px; color:#7a5d00; line-height:1.5; }
+  /* 可貼上的圖位：聚焦時提示 */
+  .pastebox:focus{ outline:2px solid var(--orange); outline-offset:1px; }
+  .note-in{ font-size:11px; }
+
+  /* 標註編輯器 */
+  .anno-modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1000; display:flex; align-items:center; justify-content:center; }
+  .anno-dialog{ background:#fff; width:min(920px,95vw); max-height:94vh; display:flex; flex-direction:column; box-shadow:0 10px 40px rgba(0,0,0,.3); }
+  .anno-head{ display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid var(--line); font-weight:700; font-size:13px; }
+  .anno-x{ border:none; background:none; font-size:18px; cursor:pointer; color:#888; }
+  .anno-tools{ display:flex; gap:8px; align-items:center; padding:10px 16px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  .atool{ border:1px solid var(--ink); background:#fff; padding:7px 12px; font-size:13px; font-weight:700; font-family:inherit; cursor:pointer; }
+  .atool.on{ background:var(--ink); color:#fff; }
+  .atool-hint{ font-size:11px; color:#888; }
+  .anno-stage-wrap{ padding:16px; overflow:auto; background:#f4f4f4; flex:1; display:flex; align-items:center; justify-content:center; }
+  .anno-stage{ position:relative; display:inline-block; line-height:0; cursor:crosshair; user-select:none; touch-action:none; }
+  .anno-stage img{ max-width:100%; max-height:72vh; min-width:340px; display:block; }
+  .anno-foot{ display:flex; gap:10px; justify-content:flex-end; padding:12px 16px; border-top:1px solid var(--line); }
+  /* 標註元素（編輯器與預覽共用） */
+  .anno-item{ position:absolute; }
+  .anno-arrow{ transform-origin:0 50%; }
+  .anno-arrow .shaft{ position:absolute; top:50%; left:0; height:3px; background:#FF1E1E; transform:translateY(-50%); }
+  .anno-arrow .head{ position:absolute; top:50%; right:-1px; width:0; height:0; border-left:11px solid #FF1E1E; border-top:7px solid transparent; border-bottom:7px solid transparent; transform:translateY(-50%); }
+  .anno-circle{ border:3px solid #FF1E1E; border-radius:50%; box-sizing:border-box; }
+  .anno-text{ color:#FF1E1E; font-weight:800; font-size:14px; white-space:nowrap; background:rgba(255,255,255,.7); padding:1px 4px; }
+  /* 編輯器內可互動 */
+  .anno-stage .anno-item{ cursor:move; }
+  .anno-stage .anno-item.sel{ outline:1px dashed rgba(30,144,255,.6); outline-offset:6px; }
+  .anno-overlay{ position:absolute; inset:0; pointer-events:none; }
+  .img-wrap{ position:relative; display:inline-block; line-height:0; max-width:100%; max-height:100%; }
+  .img-wrap img{ display:block; max-width:100%; max-height:100%; }
+  .anno-overlay .anno-item{ pointer-events:none; }
+  .anno-del{ position:absolute; top:-13px; right:-13px; width:18px; height:18px; border-radius:50%; background:#c0392b; color:#fff; font-size:11px; line-height:18px; text-align:center; cursor:pointer; z-index:6; pointer-events:auto; }
+  .anno-handle{ position:absolute; right:-13px; bottom:-13px; width:15px; height:15px; border-radius:50%; background:#1E90FF; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.4); cursor:nwse-resize; z-index:6; pointer-events:auto; }
+  .anno-arrow .anno-handle, .anno-item[data-idx] .anno-handle{ }
 </style>
 </head>
 <body>
@@ -209,38 +246,62 @@
       <div class="hint">每塊一個黑底標題，底下可放多張「圖 + 操作方式」。圖自行上傳、文字自己打。</div><div class="block">
         <div class="block-bar"><input value="頭枕操作說明" oninput="upBlock(1,this.value)"><button class="icon" style="color:#fff;border-color:#fff" onclick="toggleLayout(1)">並排圖</button><button class="icon" style="color:#fff;border-color:#fff" onclick="rmBlock(1)">刪</button></div>
         <div class="block-body"><div class="item"><div class="item-row">
-          <div class="uploadbox" style="flex:0 0 84px;height:84px" onclick="pickImg(d=&gt;setItemImg(1,11,d))">上傳圖</div>
+          <div style="flex:0 0 84px">
+            <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(1,11,d))" onpaste="pasteImg(event,d=&gt;setItemImg(1,11,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(1,11)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
+          </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(1,11,this.value)">握住頭枕兩側，向上或向下推移即可調整高低。</textarea>
+            <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="" oninput="upItemNote(1,11,this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(1,11)">刪除此項</button>
           </div></div></div><div class="item"><div class="item-row">
-          <div class="uploadbox" style="flex:0 0 84px;height:84px" onclick="pickImg(d=&gt;setItemImg(1,12,d))">上傳圖</div>
+          <div style="flex:0 0 84px">
+            <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(1,12,d))" onpaste="pasteImg(event,d=&gt;setItemImg(1,12,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(1,12)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
+          </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(1,12,this.value)">扶住頭枕前緣，向上或向下轉動以調整傾仰角度。</textarea>
+            <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="" oninput="upItemNote(1,12,this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(1,12)">刪除此項</button>
           </div></div></div><button class="add" onclick="addItem(1)">＋ 加一張圖/操作</button></div></div><div class="block">
         <div class="block-bar"><input value="扶手操作說明" oninput="upBlock(2,this.value)"><button class="icon" style="color:#fff;border-color:#fff" onclick="toggleLayout(2)">並排圖</button><button class="icon" style="color:#fff;border-color:#fff" onclick="rmBlock(2)">刪</button></div>
         <div class="block-body"><div class="item"><div class="item-row">
-          <div class="uploadbox" style="flex:0 0 84px;height:84px" onclick="pickImg(d=&gt;setItemImg(2,21,d))">上傳圖</div>
+          <div style="flex:0 0 84px">
+            <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(2,21,d))" onpaste="pasteImg(event,d=&gt;setItemImg(2,21,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(2,21)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
+          </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(2,21,this.value)">按壓扶手墊下方按鍵，同時上下移動扶手調整高度。</textarea>
+            <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="" oninput="upItemNote(2,21,this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(2,21)">刪除此項</button>
           </div></div></div><div class="item"><div class="item-row">
-          <div class="uploadbox" style="flex:0 0 84px;height:84px" onclick="pickImg(d=&gt;setItemImg(2,22,d))">上傳圖</div>
+          <div style="flex:0 0 84px">
+            <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(2,22,d))" onpaste="pasteImg(event,d=&gt;setItemImg(2,22,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(2,22)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
+          </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(2,22,this.value)">推動扶手墊前後滑移，調整至前臂自然支撐的位置。</textarea>
+            <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="" oninput="upItemNote(2,22,this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(2,22)">刪除此項</button>
           </div></div></div><div class="item"><div class="item-row">
-          <div class="uploadbox" style="flex:0 0 84px;height:84px" onclick="pickImg(d=&gt;setItemImg(2,23,d))">上傳圖</div>
+          <div style="flex:0 0 84px">
+            <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(2,23,d))" onpaste="pasteImg(event,d=&gt;setItemImg(2,23,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(2,23)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
+          </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(2,23,this.value)">轉動扶手墊呈扇形左右擺動，貼合手臂角度。</textarea>
+            <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="" oninput="upItemNote(2,23,this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(2,23)">刪除此項</button>
           </div></div></div><button class="add" onclick="addItem(2)">＋ 加一張圖/操作</button></div></div><div class="block">
         <div class="block-bar"><input value="椅背後仰 &amp; 升降操作說明" oninput="upBlock(3,this.value)"><button class="icon" style="color:#fff;border-color:#fff" onclick="toggleLayout(3)">左文右圖</button><button class="icon" style="color:#fff;border-color:#fff" onclick="rmBlock(3)">刪</button></div>
         <div class="block-body"><div class="item"><div class="item-row">
-          <div class="uploadbox" style="flex:0 0 84px;height:84px" onclick="pickImg(d=&gt;setItemImg(3,31,d))">上傳圖</div>
+          <div style="flex:0 0 84px">
+            <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=&gt;setItemImg(3,31,d))" onpaste="pasteImg(event,d=&gt;setItemImg(3,31,d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">上傳/貼上</div>
+            <button class="icon" style="width:100%;margin-top:5px;" onclick="openAnno(3,31)" disabled="" title="先上傳圖才能標註">✎ 標註</button>
+          </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(3,31,this.value)">向上扳起控制桿調整座椅升降；向外拉開控制桿開啟椅背後仰；向內推進控制桿鎖定後仰角度。</textarea>
+            <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="" oninput="upItemNote(3,31,this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(3,31)">刪除此項</button>
           </div></div></div><button class="add" onclick="addItem(3)">＋ 加一張圖/操作</button></div></div><button class="add" onclick="addBlock()">＋ 新增操作區塊</button></div><div class="toolbar-bottom">
     <button class="btn-io" onclick="saveProgress()">匯出進度</button>
@@ -258,6 +319,30 @@
       </div>
       <div class="hero empty">產品主視覺照</div>
     </div><div class="pblock"><div class="pblock-bar">頭枕操作說明</div><div class="pitems" style="grid-template-columns:repeat(2,1fr)"><div class="pitem"><div class="img empty">線稿圖</div><div class="lbl">操作方式</div><div class="txt">握住頭枕兩側，向上或向下推移即可調整高低。</div></div><div class="pitem"><div class="img empty">線稿圖</div><div class="lbl">操作方式</div><div class="txt">扶住頭枕前緣，向上或向下轉動以調整傾仰角度。</div></div></div></div><div class="pblock"><div class="pblock-bar">扶手操作說明</div><div class="pitems" style="grid-template-columns:repeat(3,1fr)"><div class="pitem"><div class="img empty">線稿圖</div><div class="lbl">操作方式</div><div class="txt">按壓扶手墊下方按鍵，同時上下移動扶手調整高度。</div></div><div class="pitem"><div class="img empty">線稿圖</div><div class="lbl">操作方式</div><div class="txt">推動扶手墊前後滑移，調整至前臂自然支撐的位置。</div></div><div class="pitem"><div class="img empty">線稿圖</div><div class="lbl">操作方式</div><div class="txt">轉動扶手墊呈扇形左右擺動，貼合手臂角度。</div></div></div></div><div class="pblock"><div class="pblock-bar">椅背後仰 &amp; 升降操作說明</div><div class="pitems-side"><div class="pitem-side"><div class="side-txt"><div class="lbl">操作方式</div><div class="txt">向上扳起控制桿調整座椅升降；向外拉開控制桿開啟椅背後仰；向內推進控制桿鎖定後仰角度。</div></div><div class="side-img empty">線稿圖</div></div></div></div><div class="pfoot">© 2026 BACKBONE. All rights reserved.</div></div></div>
+  </div>
+</div>
+
+<!-- 標註編輯器 -->
+<div id="annoModal" class="anno-modal" style="display:none">
+  <div class="anno-dialog">
+    <div class="anno-head">
+      <span>圖片標註（只給設計看，列印時不會出現）</span>
+      <button class="anno-x" onclick="closeAnno()">✕</button>
+    </div>
+    <div class="anno-tools">
+      <button class="atool" data-tool="arrow" onclick="setTool(&#39;arrow&#39;)">↗ 箭頭</button>
+      <button class="atool" data-tool="circle" onclick="setTool(&#39;circle&#39;)">◯ 圈選</button>
+      <button class="atool" data-tool="text" onclick="setTool(&#39;text&#39;)">T 文字</button>
+      <span class="atool-hint" id="atoolHint">選一個工具，在圖上點擊新增；標註可拖動，點選後按 Delete 或紅 ✕ 刪除。</span>
+      <button class="icon del" style="margin-left:auto" onclick="clearAnno()">清除全部</button>
+    </div>
+    <div class="anno-stage-wrap">
+      <div id="annoStage" class="anno-stage"></div>
+    </div>
+    <div class="anno-foot">
+      <button class="icon" onclick="closeAnno()">取消</button>
+      <button class="btn-pdf" style="flex:0 0 120px" onclick="saveAnno()">完成</button>
+    </div>
   </div>
 </div>
 <script>
@@ -333,6 +418,22 @@ function pickImg(cb){
   inp.click();
 }
 
+// Ctrl+V 貼上截圖到圖位
+function pasteImg(e, cb){
+  const items = (e.clipboardData || window.clipboardData)?.items;
+  if(!items) return;
+  for(const it of items){
+    if(it.type && it.type.indexOf("image") === 0){
+      e.preventDefault();
+      const f = it.getAsFile();
+      const r = new FileReader();
+      r.onload = () => { cb(r.result); render(); };
+      r.readAsDataURL(f);
+      return;
+    }
+  }
+}
+
 // 零件代號：依清單順序 A/B/C...
 function letterFor(idx){ return String.fromCharCode(65 + idx); }
 
@@ -384,10 +485,15 @@ function renderLeft(){
         <div class="block-bar"><input value="${esc(b.title)}" oninput="upBlock(${b.id},this.value)"><button class="icon" style="color:#fff;border-color:#fff" onclick="toggleLayout(${b.id})">${lay==='side'?'左文右圖':'並排圖'}</button><button class="icon" style="color:#fff;border-color:#fff" onclick="rmBlock(${b.id})">刪</button></div>
         <div class="block-body">`;
       b.items.forEach(it => {
+        const annoCount = (it.anno && it.anno.length) ? it.anno.length : 0;
         h += `<div class="item"><div class="item-row">
-          <div class="uploadbox" style="flex:0 0 84px;height:84px" onclick="pickImg(d=>setItemImg(${b.id},${it.id},d))">${it.img?`<img src="${it.img}">`:"上傳圖"}</div>
+          <div style="flex:0 0 84px">
+            <div class="uploadbox pastebox" tabindex="0" style="height:84px" onclick="pickImg(d=>setItemImg(${b.id},${it.id},d))" onpaste="pasteImg(event,d=>setItemImg(${b.id},${it.id},d))" title="點擊上傳，或先點一下再 Ctrl+V 貼上截圖">${it.img?`<img src="${it.img}">`:"上傳/貼上"}</div>
+            <button class="icon" style="width:100%;margin-top:5px;${annoCount?'color:#FF5A1F;border-color:#FF5A1F':''}" onclick="openAnno(${b.id},${it.id})" ${it.img?'':'disabled title=\"先上傳圖才能標註\"'}>✎ 標註${annoCount?`(${annoCount})`:''}</button>
+          </div>
           <div style="flex:1">
             <textarea class="t" placeholder="操作方式說明文字" oninput="upItem(${b.id},${it.id},this.value)">${esc(it.text)}</textarea>
+            <input class="t note-in" placeholder="✎ 給設計的備註（選填，例：箭頭指向拉桿、放大這顆按鈕）" value="${esc(it.note||'')}" oninput="upItemNote(${b.id},${it.id},this.value)" style="margin-top:6px">
             <button class="icon del" style="margin-top:6px" onclick="rmItem(${b.id},${it.id})">刪除此項</button>
           </div></div></div>`;
       });
@@ -467,12 +573,12 @@ function renderRight(){
       if(b.layout === "side"){
         // 左文右圖：每個 item 一列，文字左、圖右（圖較大直式空間）
         h += `<div class="pitems-side">` +
-          b.items.map(it => `<div class="pitem-side"><div class="side-txt"><div class="lbl">操作方式</div><div class="txt">${esc(it.text)||'<span style="color:#8A8A8A">尚未填寫</span>'}</div></div><div class="side-img${it.img?'':' empty'}">${it.img?`<img src="${it.img}">`:"線稿圖"}</div></div>`).join("") +
+          b.items.map(it => `<div class="pitem-side"><div class="side-txt"><div class="lbl">操作方式</div><div class="txt">${esc(it.text)||'<span style="color:#8A8A8A">尚未填寫</span>'}</div>${it.note?`<div class="design-note no-print">✎ ${esc(it.note)}</div>`:''}</div><div class="side-img${it.img?'':' empty'}">${it.img?`<span class="img-wrap"><img src="${it.img}">${annoOverlay(it)}</span>`:"線稿圖"}</div></div>`).join("") +
           `</div>`;
       } else {
         const cols = Math.min(b.items.length, 3) || 1;
         h += `<div class="pitems" style="grid-template-columns:repeat(${cols},1fr)">` +
-          b.items.map(it => `<div class="pitem"><div class="img${it.img?'':' empty'}">${it.img?`<img src="${it.img}">`:"線稿圖"}</div><div class="lbl">操作方式</div><div class="txt">${esc(it.text)||'<span style="color:#8A8A8A">尚未填寫</span>'}</div></div>`).join("") +
+          b.items.map(it => `<div class="pitem"><div class="img${it.img?'':' empty'}">${it.img?`<span class="img-wrap"><img src="${it.img}">${annoOverlay(it)}</span>`:"線稿圖"}</div><div class="lbl">操作方式</div><div class="txt">${esc(it.text)||'<span style="color:#8A8A8A">尚未填寫</span>'}</div>${it.note?`<div class="design-note no-print">✎ ${esc(it.note)}</div>`:''}</div>`).join("") +
           `</div>`;
       }
       h += `</div>`;
@@ -576,7 +682,166 @@ function addBlock(){ state.opsBlocks.push({id:uid(),title:"新操作區塊",item
 function addItem(bid){ state.opsBlocks.find(b=>b.id===bid).items.push({id:uid(),img:null,text:""}); render(); }
 function rmItem(bid,iid){ const b=state.opsBlocks.find(x=>x.id===bid); b.items=b.items.filter(i=>i.id!==iid); render(); }
 function upItem(bid,iid,v){ state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid).text=v; renderRight(); }
+function upItemNote(bid,iid,v){ state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid).note=v; renderRight(); }
 function setItemImg(bid,iid,d){ state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid).img=d; }
+
+// ====== 圖片標註編輯器 ======
+let _anno = { bid:null, iid:null, tool:"arrow", list:[], sel:-1 };
+
+function openAnno(bid, iid){
+  const it = state.opsBlocks.find(b=>b.id===bid).items.find(i=>i.id===iid);
+  if(!it.img){ return; }
+  _anno.bid = bid; _anno.iid = iid;
+  _anno.list = JSON.parse(JSON.stringify(it.anno || []));
+  _anno.sel = -1;
+  _anno.tool = "arrow";
+  const modal = document.getElementById("annoModal");
+  const stage = document.getElementById("annoStage");
+  stage.innerHTML = `<img src="${it.img}" id="annoImg">`;
+  modal.style.display = "flex";
+  setTool("arrow");
+  const img = document.getElementById("annoImg");
+  if(img.complete) drawAnno(); else img.onload = drawAnno;
+  stage.onpointerdown = stageDown;
+}
+function closeAnno(){ document.getElementById("annoModal").style.display = "none"; }
+function setTool(t){
+  _anno.tool = t;
+  document.querySelectorAll(".atool").forEach(b => b.classList.toggle("on", b.dataset.tool === t));
+}
+function clearAnno(){ _anno.list = []; _anno.sel = -1; drawAnno(); }
+
+// 在 stage 上點擊新增標註（座標存成百分比）
+function stageDown(e){
+  const stage = document.getElementById("annoStage");
+  // 1) 先判斷有沒有點到刪除鈕（X）
+  const delBtn = e.target.closest(".anno-del");
+  if(delBtn){
+    e.preventDefault();
+    delAnno(+delBtn.dataset.idx);
+    return;
+  }
+  // 2) 點到縮放/調整控制點 → 進入縮放
+  const handle = e.target.closest(".anno-handle");
+  if(handle){
+    e.preventDefault();
+    _anno.sel = +handle.dataset.idx; drawAnno();
+    startResize(e, +handle.dataset.idx);
+    return;
+  }
+  // 3) 點到既有標註 → 拖動
+  const hit = e.target.closest(".anno-item");
+  if(hit){
+    e.preventDefault();
+    const idx = +hit.dataset.idx;
+    _anno.sel = idx; drawAnno();
+    startDrag(e, idx);
+    return;
+  }
+  // 4) 空白處：若有選取中的標註 → 先取消選取（看乾淨結果）；否則依工具新增
+  if(_anno.sel >= 0){
+    _anno.sel = -1;
+    drawAnno();
+    return;
+  }
+  const r = stage.getBoundingClientRect();
+  const x = ((e.clientX - r.left) / r.width) * 100;
+  const y = ((e.clientY - r.top) / r.height) * 100;
+  if(_anno.tool === "arrow"){
+    _anno.list.push({ type:"arrow", x, y, len:18, ang:0 });
+  } else if(_anno.tool === "circle"){
+    _anno.list.push({ type:"circle", x, y, w:18, h:18 });
+  } else if(_anno.tool === "text"){
+    const t = prompt("輸入標註文字："); if(!t) return;
+    _anno.list.push({ type:"text", x, y, text:t });
+  }
+  _anno.sel = _anno.list.length - 1;
+  drawAnno();
+}
+
+// 縮放：圈改大小、箭頭改長度與角度
+function startResize(e, idx){
+  const stage = document.getElementById("annoStage");
+  const r = stage.getBoundingClientRect();
+  const a = _anno.list[idx];
+  function move(ev){
+    const px = ((ev.clientX - r.left)/r.width)*100;
+    const py = ((ev.clientY - r.top)/r.height)*100;
+    if(a.type === "circle"){
+      a.w = Math.max(4, Math.abs(px - a.x));
+      a.h = Math.max(4, Math.abs(py - a.y));
+    } else if(a.type === "arrow"){
+      const dx = px - a.x, dy = py - a.y;
+      a.len = Math.max(4, Math.sqrt(dx*dx + dy*dy));
+      a.ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    }
+    drawAnno();
+  }
+  function up(){ document.removeEventListener("pointermove", move); document.removeEventListener("pointerup", up); }
+  document.addEventListener("pointermove", move);
+  document.addEventListener("pointerup", up);
+}
+
+function startDrag(e, idx){
+  const stage = document.getElementById("annoStage");
+  const r = stage.getBoundingClientRect();
+  const a = _anno.list[idx];
+  const ox = ((e.clientX - r.left)/r.width)*100 - a.x;
+  const oy = ((e.clientY - r.top)/r.height)*100 - a.y;
+  function move(ev){
+    a.x = Math.max(0, Math.min(100, ((ev.clientX - r.left)/r.width)*100 - ox));
+    a.y = Math.max(0, Math.min(100, ((ev.clientY - r.top)/r.height)*100 - oy));
+    drawAnno();
+  }
+  function up(){ document.removeEventListener("pointermove", move); document.removeEventListener("pointerup", up); }
+  document.addEventListener("pointermove", move);
+  document.addEventListener("pointerup", up);
+}
+
+// 把標註清單畫成 HTML（編輯器內）
+function annoItemHTML(a, idx, editable){
+  const selCls = editable && _anno.sel===idx ? 'sel' : '';
+  const delBtn = editable ? `<span class="anno-del" data-idx="${idx}">✕</span>` : '';
+  const handle = (editable && _anno.sel===idx) ? `<span class="anno-handle" data-idx="${idx}"></span>` : '';
+  if(a.type === "arrow"){
+    const len = a.len || 18;
+    const inner = `<div class="anno-arrow" style="width:100%"><div class="shaft" style="width:100%"></div><div class="head"></div></div>`;
+    return `<div class="anno-item ${selCls}" data-idx="${idx}" style="left:${a.x}%;top:${a.y}%;width:${len}%;transform:rotate(${a.ang||0}deg);transform-origin:0 50%">
+      ${inner}${delBtn}${handle}</div>`;
+  } else if(a.type === "circle"){
+    return `<div class="anno-item anno-circle ${selCls}" data-idx="${idx}" style="left:${a.x}%;top:${a.y}%;width:${a.w||18}%;height:${a.h||18}%">
+      ${delBtn}${handle}</div>`;
+  } else if(a.type === "text"){
+    return `<div class="anno-item anno-text ${selCls}" data-idx="${idx}" style="left:${a.x}%;top:${a.y}%">${esc(a.text)}${delBtn}</div>`;
+  }
+  return "";
+}
+function drawAnno(){
+  const stage = document.getElementById("annoStage");
+  const img = stage.querySelector("img");
+  // 移除舊標註層
+  stage.querySelectorAll(".anno-item").forEach(n=>n.remove());
+  _anno.list.forEach((a,idx) => img.insertAdjacentHTML("afterend", annoItemHTML(a, idx, true)));
+}
+function delAnno(idx){ _anno.list.splice(idx,1); _anno.sel=-1; drawAnno(); }
+function saveAnno(){
+  const it = state.opsBlocks.find(b=>b.id===_anno.bid).items.find(i=>i.id===_anno.iid);
+  it.anno = _anno.list;
+  closeAnno();
+  render();
+}
+
+// 預覽用：把標註疊在圖上（列印時隱藏）
+function annoOverlay(it){
+  if(!it.anno || !it.anno.length) return "";
+  const layer = it.anno.map(a => annoItemHTML(a, -1, false)).join("");
+  return `<div class="anno-overlay no-print">${layer}</div>`;
+}
+// 鍵盤刪除選取的標註
+document.addEventListener("keydown", (e)=>{
+  if(document.getElementById("annoModal").style.display==="none") return;
+  if((e.key==="Delete"||e.key==="Backspace") && _anno.sel>=0){ delAnno(_anno.sel); }
+});
 
 function upStep(id,k,v){ state.aSteps.find(s=>s.id===id)[k]=v; renderRight(); }
 function rmStep(id){ state.aSteps=state.aSteps.filter(s=>s.id!==id); render(); }
